@@ -1,0 +1,12 @@
+%workbook
+  %sheet(name="")
+    %row
+      %cell(colspan="2" rowpan="2")
+        First Test
+    / Test a loop |
+      and a join  |
+    -# and a code comment
+    - for ($i=0;$i<10;$i++)
+      %row
+        %cell
+          = $i

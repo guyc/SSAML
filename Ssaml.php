@@ -8,38 +8,40 @@
 
 class Ssaml
 {
+
+    const PHP_MODE = 'php';
+    const XML_MODE = 'xml';
+
     static $PHPExcel = "PHPExcel";             // path to PHPExcel relative to this directory
     static $tempDir = null;                    // defaults to system temp directory
     static $xmlxMimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-    static function GeneratePhp($Template)
+    static function SsamlToPhp($Ssaml)
     {
-        $ssmlParser = new SsamlParser();
-        $php = $ssmlParser->ParseFile($Template);
+        $php = SsamlParser::ParseString();
+        return $php;
+    }
+
+    static function SsamlFileToPhp($SsamlFile)
+    {
+        $php = SsamlParser::ParseFile($SsamlFile);
         return $php;
     }
 
     // returns Ssaml XML as a string
-    static function GenerateSsaml($Template, $Args=null)
+    static function PhpToXml($Php, $Args=null)
     {
-        ob_start();
-        self::RenderSsaml($Template, $Args);
-        $ssml = ob_get_contents();
-        ob_end_clean();
-        return $xslFo;
-    }
-
-    static function RenderSsaml($Template, $Args)
-    {
-        // import variables
         if ($Args) {
             foreach ($Args as $key=>$value) {
                 $$key = $value;
             }
         }
-        $_php = self::GeneratePhp($Template);
-        //Dump(htmlspecialchars($_php)); return;
-        eval("?".">".$_php);  // prefixed with ? > to exit implicit php mode
+
+        ob_start();
+        eval("?".">".$Php);  // prefixed with ? > to exit implicit php mode
+        $xml = ob_get_contents();
+        ob_end_clean();
+        return $xml;
     }
 
     static function TempName($Prefix)
@@ -49,16 +51,13 @@ class Ssaml
         return tempnam($tempDir, $Prefix);
     }
 
-    static function SsamlToXmlx($Ssaml)
-    {
-        $ssmlDir = dirname(__FILE__);
-    }
-
     // Write the template into an xslx file and render it as an upload
     static function Render($Template, $Args=null, $Headers=null)
     {
-        $xslFo = self::GenerateXslFo($Template, $Args);
-        $pdfFileName = self::XslFoToPdf($xslFo);
+        $php = self::SsaslFileToPhp($Template);
+        $xml = self::PhpToXlm($xml);
+        $xlsxFileName = SsamlXlsx::XmlToXlsxFile($xml);
+
         $size = filesize($pdfFileName);
         $pdfMimeType = self::$pdfMimeType;
 

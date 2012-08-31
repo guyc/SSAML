@@ -1,13 +1,15 @@
 Process:
 
 SSAML:  Spreadsheet Abstraction Markup Language
-SSML:   Spreadsheet Markup Language
 
-Take a ssaml template convert to PHP
+Broadest view:
+
+Parse a SSAML string into a tree
+Generate PHP from the tree         
 Run the PHP to generate SSXML
-Process the SSXML to generate XMLX
+Process the SSXML to generate XMLX doc with PHPExcel
 
-
+SSAML:
 
 %workbook
   %sheet(name="")
