@@ -1,0 +1,18 @@
+Process:
+
+SSAML:  Spreadsheet Abstraction Markup Language
+SSML:   Spreadsheet Markup Language
+
+Take a ssaml template convert to PHP
+Run the PHP to generate SSXML
+Process the SSXML to generate XMLX
+
+
+
+%workbook
+  %sheet(name="")
+    %column(col="a")
+    %row(row="1")
+      %cell(colspan="2" rowpan="2")
+        SPANNED
+
