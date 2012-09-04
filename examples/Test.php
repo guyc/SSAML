@@ -2,6 +2,8 @@
 
 require_once "../SsamlConfig.php";
 
+date_default_timezone_set('Australia/Brisbane');
+
 // debugging preformatted recursive dump
 function Dump($Var)
 {
@@ -10,12 +12,5 @@ function Dump($Var)
     print "</pre>";
 }
 
-print "<h3>PHP</h3>";
-$php = Ssaml::SsamlFileToPhp('Test.ssaml');
-Dump(htmlentities($php));
-
-print "<h3>XML</h3>";
-$xml = SSaml::PhpToXml($php);
-Dump(htmlentities($xml));
-$file = SsamlXlsx::XmlToXlsxFile($xml);
-
+$args = array('title'=>'Jumping Jupiters');
+SSaml::RenderAttachment('Test.ssaml', 'Test.xlsx', $args);

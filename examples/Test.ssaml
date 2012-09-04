@@ -1,12 +1,18 @@
 %workbook
-  %sheet(name="")
+  %sheet(name="Groovy")
     %row
-      %cell(colspan="2" rowpan="2")
+      %cell(colspan="2" rowspan="2")
         First Test
     / Test a loop |
       and a join  |
     -# and a code comment
     - for ($i=0;$i<10;$i++)
       %row
-        %cell
+        %cell(font-weight="bold" text-align="right")
           = $i
+        %cell(text-align="left")
+          = $i * $i
+  %sheet
+    %row
+      %cell
+        Huh
