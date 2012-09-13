@@ -3,6 +3,7 @@ class SsamlXlsx
 {
     static public $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; //'application/msexcel';
     static public $tags = array(
+                                'xlsx',
                                 'workbook',
                                 'sheet',
                                 'row',
@@ -49,6 +50,16 @@ class SsamlXlsx
     {
     }
 
+    //----------------------------------------------------------------------
+    // Xlsx
+    // This is just the outer container of the document because every XML
+    // document needs a single outer element.  It does nothing.
+    function StartXlsx($Attrib)
+    {
+    }
+    function EndXlsx()
+    {
+    }
     //----------------------------------------------------------------------
     // Sheet
 
