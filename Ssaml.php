@@ -63,6 +63,13 @@ class Ssaml
         $disposition = "attachment; filename=\"{$Filename}\"";
         self::Render($Template, $Args, $disposition);
     }
+
+    static function XmlEntities($String)
+    {
+        return str_replace(array("&", "<", ">", "\"", "'"),
+                           array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
+                           $String);
+    }
 }
 
 ?>

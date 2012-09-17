@@ -16,3 +16,7 @@
     %row
       %cell
         Huh
+      %cell
+        = 'Escaping and Stuff'
+      %cell
+        = 'Escaping & Stuff'

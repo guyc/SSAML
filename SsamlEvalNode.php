@@ -11,8 +11,8 @@ class SsamlEvalNode extends SsamlNode
 
     function RenderPrefix()
     {
-        print "print htmlentities((";
+        print "print Ssaml::XmlEntities(";
         print $this->code;
-        print "),ENT_XML1);\n";
+        print ");\n";
     }
 }
