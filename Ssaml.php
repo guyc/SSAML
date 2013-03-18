@@ -66,9 +66,39 @@ class Ssaml
 
     static function XmlEntities($String)
     {
-        return str_replace(array("&", "<", ">", "\"", "'"),
-                           array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
-                           $String);
+      // REVISIT - this is from http://lists.gnu.org/archive/html/help-gnu-emacs/2004-07/msg00049.html
+      // Should use XML entities where they exist.
+      $tr = array(
+		  "\202" => ",",
+		  "\203" => "f",
+		  "\204" => ",,",
+		  "\205" => "...",
+		  "\213" => "<",
+		  "\214" => "OE",
+		  "\221" => "`",
+		  "\222" => "'",
+		  "\223" => "``",
+		  "\224" => "\"",
+		  "\225" => "*",
+		  "\226" => "-",
+		  "\227" => "--",
+		  "\231" => "(TM)",
+		  "\233" => ">",
+		  "\234" => "oe",
+		  "\264" => "'");
+
+      
+
+        $string = $String;
+	foreach ($tr as $find=>$replace) {
+	  $string = str_replace($find, $replace, $string);
+	}
+
+        $string = str_replace(array("&", "<", ">", "\"", "'"),
+			      array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
+			      $string);
+        $string = utf8_encode($string);
+	return $string;
     }
 }
 
