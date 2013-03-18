@@ -42,8 +42,8 @@ class SsamlXlsx
 
     function StartWorkbook($Attrib)
     {
-        $cell = $this->sheet->getCellByColumnAndRow(5,5);
-        $cell->setValue('this is 5,5');
+        //$cell = $this->sheet->getCellByColumnAndRow(5,5);
+        //$cell->setValue('this is 5,5');
     }
     
     function EndWorkbook()
