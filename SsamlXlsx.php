@@ -90,11 +90,26 @@ class SsamlXlsx
     function StartRow($Attrib)
     {
         $this->col = 0;
+        $this->SetAttributes('Row', $Attrib);
     }
 
     function EndRow()
     {
         $this->row++;
+    }
+
+    function SetRowFillColor($Color)
+    {
+        if ($Color != '') {
+            $style = $this->RowStyle();
+            $style->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB($Color);
+        }
+    }
+
+    function RowStyle()
+    {
+        $row = ($this->row+1);
+        return $this->sheet->getStyle($row);
     }
 
     //----------------------------------------------------------------------
@@ -135,12 +150,12 @@ class SsamlXlsx
 
     function SetCellRowspan($Value)
     {
-        $this->cellColSpan = $Value;
+        $this->cellRowSpan = $Value;
     }
 
     function SetCellColspan($Value)
     {
-        $this->cellRowSpan = $Value;
+        $this->cellColSpan = $Value;
     }
 
     function SetCellFontWeight($Value)
@@ -154,6 +169,13 @@ class SsamlXlsx
         }
     }
 
+    function SetCellFillColor($Value)
+    {
+        if ($Value != '') {
+            $this->Style()->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setARGB($Value);
+        }
+    }
+
     function SetCellTextAlign($Value)
     {
         switch (strtolower($Value)) {
@@ -163,10 +185,38 @@ class SsamlXlsx
             case 'right':
                 $alignment = PHPExcel_Style_Alignment::HORIZONTAL_RIGHT;
                 break;
+            case 'center':
+                $alignment = PHPExcel_Style_Alignment::HORIZONTAL_CENTER;
+                break;
             default:
                 $this->error("Unknown cell text-align value '${Value}'");
         }
         $this->Style()->getAlignment()->setHorizontal($alignment);
+    }
+
+    function SetCellFormat($Value)
+    {
+        switch (strtolower($Value)) {
+            case 'text':
+                $format = PHPExcel_Style_NumberFOrmat::FORMAT_TEXT;
+                break;
+            case 'date':
+                $format = PHPExcel_Style_NumberFormat::FORMAT_DATE_DMYSLASH; // 'd/m/y'
+                break;
+            case 'currency':
+                $format = PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE; // '"$"#,##0.00_-'
+                break;
+            default:
+                $this->error("Unknown cell format value '${Value}'");
+                $format = $Value;
+        }
+        $this->Style()->getNumberFormat()->setFormatCode($format);
+    }
+
+    function SetCellWidth($Value)
+    {
+        $column = $this->ColumnAddress();
+        $this->sheet->getColumnDimension($column)->setWidth($Value);
     }
 
     //----------------------------------------------------------------------
@@ -174,6 +224,11 @@ class SsamlXlsx
     function Style()
     {
         return $this->sheet->getStyleByColumnAndRow($this->col, $this->row+1);
+    }
+
+    function ColumnAddress()
+    {
+        return PHPExcel_Cell::stringFromColumnIndex($this->col);
     }
 
     // eg text-align => TextAlign
@@ -261,6 +316,11 @@ class SsamlXlsx
     {
         $fileName = tempnam("/tmp", "worksheet.xls");
         $this->WriteToFile($fileName);
+
+        if ($Disposition == 'file') {
+            return $fileName;
+        }
+
         $size = filesize($fileName);
         $this->headers['Content-Length'] = $size;
         $this->headers['Content-disposition'] = $Disposition;

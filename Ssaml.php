@@ -50,7 +50,7 @@ class Ssaml
         $php = self::SsamlFileToPhp($Template);
         $xml = self::PhpToXml($php, $Args);
         $xlsx = new SsamlXlsx($xml);
-        $xlsx->Render($Disposition);
+        return $xlsx->Render($Disposition);
     }
     static function RenderInline($Template, $Args=null)
     {
