@@ -118,8 +118,8 @@ class SsamlXlsx
     function StartCell($Attrib)
     {
         $this->cdata = array();
-        $this->SetAttributes('Cell', $Attrib);
         $this->cell = $this->sheet->getCellByColumnAndRow($this->col, $this->row+1);
+        $this->SetAttributes('Cell', $Attrib);
     }
 
     function EndCell()
@@ -127,8 +127,21 @@ class SsamlXlsx
         // oddly row numbers are 1-based and column numbers are 0-based
         if (count($this->cdata)) {
             $value = join(' ',$this->cdata);
+
+            // having trouble with duplicates per : http://phpexcel.codeplex.com/workitem/19388
+            // line split characters do not seem to be the cause.
+            // Problem seems to be limited to opening in
+            // OpenOffice (not Excel or LibreOffice)
+            // Will leave for now.
+
+            //$lines = explode("\n",$value);
+            //$value = join("\r\n",$lines);
             //print "setting cell at row {$this->row} col {$this->col} to {$value}</br>";
             $this->cell->setValue($value);
+            //if (count($lines)>1) {
+            //$style = $this->Style();
+            //$style->getAlignment()->setWrapText(true);
+            //}
         }
 
         if ($this->cellColSpan || $this->cellRowSpan) {
@@ -192,6 +205,16 @@ class SsamlXlsx
                 $this->error("Unknown cell text-align value '${Value}'");
         }
         $this->Style()->getAlignment()->setHorizontal($alignment);
+    }
+
+    function SetCellUrl($Value)
+    {
+        $this->cell->getHyperlink()->setUrl($Value);
+    }
+
+    function SetCellWrap($Value) // value is ignored
+    {
+        $this->Style()->getAlignment()->setWrapText(true);
     }
 
     function SetCellFormat($Value)
@@ -332,7 +355,6 @@ class SsamlXlsx
         $fileHandle = fopen($fileName, "rb");
         fpassthru($fileHandle);
         fclose($fileHandle);
-        unlink($fileName);
         if (!Ssaml::$keepTempFiles) unlink($fileName);
     }
 
