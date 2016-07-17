@@ -20,7 +20,6 @@ require_once 'SsamlElementNode.php';
 require_once 'SsamlCommentNode.php';
 require_once 'SsamlTextNode.php';
 require_once 'SsamlXlsx.php';
-
 require_once 'PHPExcel/Classes/PHPExcel.php';
 require_once 'PHPExcel/Classes/PHPExcel/Worksheet.php';
 require_once 'PHPExcel/Classes/PHPExcel/IOFactory.php';

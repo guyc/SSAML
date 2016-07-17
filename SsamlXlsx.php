@@ -221,7 +221,7 @@ class SsamlXlsx
     {
         switch (strtolower($Value)) {
             case 'text':
-                $format = PHPExcel_Style_NumberFOrmat::FORMAT_TEXT;
+                $format = PHPExcel_Style_NumberFormat::FORMAT_TEXT;
                 break;
             case 'date':
                 $format = PHPExcel_Style_NumberFormat::FORMAT_DATE_DMYSLASH; // 'd/m/y'

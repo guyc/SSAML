@@ -44,6 +44,14 @@ class Ssaml
         return $xml;
     }
 
+    // use in ssaml file to import another file.
+    static function Import($Template, $Args=null)
+    {
+        $php = self::SsamlFileToPhp($Template);
+        $xml = self::PhpToXml($php, $Args);
+        print $xml;
+    }               
+
     // Write the template into an xslx file and render it as an upload
     static function Render($Template, $Args=null, $Disposition)
     {
