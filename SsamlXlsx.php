@@ -1,5 +1,5 @@
 <?php
-class SsamlXlsx 
+class SsamlXlsx
 {
     static public $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; //'application/msexcel';
     static public $tags = array(
@@ -45,7 +45,7 @@ class SsamlXlsx
         //$cell = $this->sheet->getCellByColumnAndRow(5,5);
         //$cell->setValue('this is 5,5');
     }
-    
+
     function EndWorkbook()
     {
     }
@@ -224,7 +224,7 @@ class SsamlXlsx
                 $format = PHPExcel_Style_NumberFormat::FORMAT_TEXT;
                 break;
             case 'date':
-                $format = PHPExcel_Style_NumberFormat::FORMAT_DATE_DMYSLASH; // 'd/m/y'
+                $format = 'dd/mm/yyyy'; // PHPExcel_Style_NumberFormat::FORMAT_DATE_DMYSLASH; // 'd/m/y' doesn't work with openoffice
                 break;
             case 'currency':
                 $format = PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE; // '"$"#,##0.00_-'
@@ -322,7 +322,7 @@ class SsamlXlsx
     {
         $this->parser = xml_parser_create();
         xml_set_object($this->parser, $this);
-        xml_set_element_handler($this->parser, 
+        xml_set_element_handler($this->parser,
                                 "StartElement",
                                 "EndElement"
                                 );
@@ -348,7 +348,7 @@ class SsamlXlsx
         $this->headers['Content-Length'] = $size;
         $this->headers['Content-disposition'] = $Disposition;
 
-        foreach ($this->headers as $key=>$value) 
+        foreach ($this->headers as $key=>$value)
         {
             header("{$key}: {$value}");
         }
