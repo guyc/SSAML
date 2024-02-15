@@ -53,7 +53,7 @@ class Ssaml
     }               
 
     // Write the template into an xslx file and render it as an upload
-    static function Render($Template, $Args=null, $Disposition)
+    static function Render($Template, $Args, $Disposition)
     {
         $php = self::SsamlFileToPhp($Template);
         $xml = self::PhpToXml($php, $Args);

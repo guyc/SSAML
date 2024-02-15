@@ -1,4 +1,6 @@
 <?php
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class SsamlXlsx
 {
     static public $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; //'application/msexcel';
@@ -18,10 +20,13 @@ class SsamlXlsx
     public $row;
     public $cellRowSpan;
     public $cellColSpan;
+    public $headers;
+    public $parser;
+    public $data;
 
     function __construct($XmlString=null)
     {
-        $this->workbook = new PHPExcel();
+        $this->workbook = new Spreadsheet();
         $this->sheet = $this->workbook->getActiveSheet();
         $this->row = 0;
         $this->col = 0;
@@ -36,7 +41,7 @@ class SsamlXlsx
     // by default writes to php:://output
     function WriteToFile($FileName='php://output')
     {
-        $writer = PHPExcel_IOFactory::createWriter($this->workbook, 'Excel2007');
+        $writer = IOFactory::createWriter($this->workbook, 'Xlsx');
         $writer->save($FileName);
     }
 
@@ -102,7 +107,7 @@ class SsamlXlsx
     {
         if ($Color != '') {
             $style = $this->RowStyle();
-            $style->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB($Color);
+            $style->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($Color);
         }
     }
 
@@ -126,7 +131,7 @@ class SsamlXlsx
     {
         // oddly row numbers are 1-based and column numbers are 0-based
         if (count($this->cdata)) {
-            $value = join(' ',$this->cdata);
+            $value = join(' ', $this->cdata);
 
             // having trouble with duplicates per : http://phpexcel.codeplex.com/workitem/19388
             // line split characters do not seem to be the cause.
@@ -178,14 +183,14 @@ class SsamlXlsx
                 $this->Style()->getFont()->setBold(true);
                 break;
             default:
-                $this->error("Unknown cell font-weight value '${Value}'");
+                $this->error("Unknown cell font-weight value '{$Value}'");
         }
     }
 
     function SetCellFillColor($Value)
     {
         if ($Value != '') {
-            $this->Style()->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setARGB($Value);
+            $this->Style()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($Value);
         }
     }
 
@@ -193,16 +198,16 @@ class SsamlXlsx
     {
         switch (strtolower($Value)) {
             case 'left':
-                $alignment = PHPExcel_Style_Alignment::HORIZONTAL_LEFT;
+                $alignment = Alignment::HORIZONTAL_LEFT;
                 break;
             case 'right':
-                $alignment = PHPExcel_Style_Alignment::HORIZONTAL_RIGHT;
+                $alignment = Alignment::HORIZONTAL_RIGHT;
                 break;
             case 'center':
-                $alignment = PHPExcel_Style_Alignment::HORIZONTAL_CENTER;
+                $alignment = Alignment::HORIZONTAL_CENTER;
                 break;
             default:
-                $this->error("Unknown cell text-align value '${Value}'");
+                $this->error("Unknown cell text-align value '{$Value}'");
         }
         $this->Style()->getAlignment()->setHorizontal($alignment);
     }
@@ -221,16 +226,16 @@ class SsamlXlsx
     {
         switch (strtolower($Value)) {
             case 'text':
-                $format = PHPExcel_Style_NumberFormat::FORMAT_TEXT;
+                $format = NumberFormat::FORMAT_TEXT;
                 break;
             case 'date':
                 $format = 'dd/mm/yyyy'; // PHPExcel_Style_NumberFormat::FORMAT_DATE_DMYSLASH; // 'd/m/y' doesn't work with openoffice
                 break;
             case 'currency':
-                $format = PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE; // '"$"#,##0.00_-'
+                $format = NumberFormat::FORMAT_CURRENCY_USD_SIMPLE; // '"$"#,##0.00_-'
                 break;
             default:
-                $this->error("Unknown cell format value '${Value}'");
+                $this->error("Unknown cell format value '{$Value}'");
                 $format = $Value;
         }
         $this->Style()->getNumberFormat()->setFormatCode($format);
@@ -251,7 +256,7 @@ class SsamlXlsx
 
     function ColumnAddress()
     {
-        return PHPExcel_Cell::stringFromColumnIndex($this->col);
+        return Cell::stringFromColumnIndex($this->col);
     }
 
     // eg text-align => TextAlign
