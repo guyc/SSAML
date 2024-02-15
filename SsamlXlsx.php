@@ -1,6 +1,9 @@
 <?php
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 class SsamlXlsx
 {
     static public $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; //'application/msexcel';
