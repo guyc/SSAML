@@ -4,6 +4,9 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+
 class SsamlXlsx
 {
     static public $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; //'application/msexcel';
@@ -259,7 +262,7 @@ class SsamlXlsx
 
     function ColumnAddress()
     {
-        return Cell::stringFromColumnIndex($this->col);
+        return Coordinate::stringFromColumnIndex($this->col);
     }
 
     // eg text-align => TextAlign
