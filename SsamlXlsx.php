@@ -135,15 +135,8 @@ class SsamlXlsx
 
     function EndCell()
     {
-        // oddly row numbers are 1-based and column numbers are 0-based
         if (count($this->cdata)) {
             $value = join(' ', $this->cdata);
-
-            // having trouble with duplicates per : http://phpexcel.codeplex.com/workitem/19388
-            // line split characters do not seem to be the cause.
-            // Problem seems to be limited to opening in
-            // OpenOffice (not Excel or LibreOffice)
-            // Will leave for now.
 
             //$lines = explode("\n",$value);
             //$value = join("\r\n",$lines);
@@ -160,8 +153,8 @@ class SsamlXlsx
             $rowSpan = intval($this->cellRowSpan);
             if ($colSpan<1) $colSpan=1;
             if ($rowSpan<1) $rowSpan=1;
-            $coord0 = $this->sheet->getCellByColumnAndRow($this->col, $this->row+1)->getCoordinate();
-            $coord1 = $this->sheet->getCellByColumnAndRow($this->col+$colSpan-1, $this->row+$rowSpan-1+1)->getCoordinate();
+            $coord0 = $this->sheet->getCellByColumnAndRow($this->col+1, $this->row+1)->getCoordinate();
+            $coord1 = $this->sheet->getCellByColumnAndRow($this->col+$colSpan-1+1, $this->row+$rowSpan-1+1)->getCoordinate();
             $range = "{$coord0}:{$coord1}";
             $this->sheet->mergeCells($range);
             $this->cellColSpan = null;
@@ -257,12 +250,12 @@ class SsamlXlsx
 
     function Style()
     {
-        return $this->sheet->getStyleByColumnAndRow($this->col, $this->row+1);
+        return $this->sheet->getStyleByColumnAndRow($this->col+1, $this->row+1);
     }
 
     function ColumnAddress()
     {
-        return Coordinate::stringFromColumnIndex($this->col);
+        return Coordinate::stringFromColumnIndex($this->col+1);
     }
 
     // eg text-align => TextAlign
