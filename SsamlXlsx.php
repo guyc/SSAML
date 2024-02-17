@@ -4,7 +4,6 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class SsamlXlsx
@@ -137,15 +136,7 @@ class SsamlXlsx
     {
         if (count($this->cdata)) {
             $value = join(' ', $this->cdata);
-
-            //$lines = explode("\n",$value);
-            //$value = join("\r\n",$lines);
-            //print "setting cell at row {$this->row} col {$this->col} to {$value}</br>";
             $this->cell->setValue($value);
-            //if (count($lines)>1) {
-            //$style = $this->Style();
-            //$style->getAlignment()->setWrapText(true);
-            //}
         }
 
         if ($this->cellColSpan || $this->cellRowSpan) {
