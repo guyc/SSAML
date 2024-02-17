@@ -129,7 +129,7 @@ class SsamlXlsx
     function StartCell($Attrib)
     {
         $this->cdata = array();
-        $this->cell = $this->sheet->getCellByColumnAndRow($this->col, $this->row+1);
+        $this->cell = $this->sheet->getCellByColumnAndRow($this->col+1, $this->row+1);
         $this->SetAttributes('Cell', $Attrib);
     }
 
