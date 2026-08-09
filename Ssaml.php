@@ -72,41 +72,17 @@ class Ssaml
         self::Render($Template, $Args, $disposition);
     }
 
+    // Input is assumed to be UTF-8, so it is escaped as-is.
+    // This used to fold CP1252 punctuation bytes down to ASCII and then call
+    // utf8_encode() to convert Latin-1 to UTF-8.  Against UTF-8 input that byte
+    // mapping corrupts multi-byte characters -- it rewrites continuation bytes,
+    // so an em dash became &quot; -- and utf8_encode() double-encodes anything
+    // non-ASCII that survives.  utf8_encode() is also deprecated as of PHP 8.2.
     static function XmlEntities($String)
     {
-      // REVISIT - this is from http://lists.gnu.org/archive/html/help-gnu-emacs/2004-07/msg00049.html
-      // Should use XML entities where they exist.
-      $tr = array(
-		  "\202" => ",",
-		  "\203" => "f",
-		  "\204" => ",,",
-		  "\205" => "...",
-		  "\213" => "<",
-		  "\214" => "OE",
-		  "\221" => "`",
-		  "\222" => "'",
-		  "\223" => "``",
-		  "\224" => "\"",
-		  "\225" => "*",
-		  "\226" => "-",
-		  "\227" => "--",
-		  "\231" => "(TM)",
-		  "\233" => ">",
-		  "\234" => "oe",
-		  "\264" => "'");
-
-      
-
-        $string = $String;
-	foreach ($tr as $find=>$replace) {
-	  $string = str_replace($find, $replace, $string);
-	}
-
-        $string = str_replace(array("&", "<", ">", "\"", "'"),
-			      array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
-			      $string);
-        $string = utf8_encode($string);
-	return $string;
+        return str_replace(array("&", "<", ">", "\"", "'"),
+			   array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
+			   (string)$String);
     }
 }
 
