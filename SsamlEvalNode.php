@@ -2,6 +2,7 @@
 class SsamlEvalNode extends SsamlNode
 {
     public $mode = Ssaml::PHP_MODE;
+    public $code;  // PHP expression to be evaluated and printed
     const MATCH_RE = "/^=\s*(.*)/";
 
     function __construct($Matches)

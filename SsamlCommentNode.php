@@ -2,7 +2,8 @@
 class SsamlCommentNode extends SsamlNode
 {
     const MATCH_RE = "/^\/(.*)/";
-    
+    public $text;  // comment text, with any child nodes flattened in
+
     function __construct($Matches)
     {
         $this->text = $Matches[1];
