@@ -135,7 +135,13 @@ class SsamlXlsx
     function EndCell()
     {
         if (count($this->cdata)) {
-            $value = join(' ', $this->cdata);
+            // The parser hands us character data in several pieces, splitting at
+            // entities and at non-ASCII characters, so the pieces must be joined
+            // with nothing between them - joining with a space used to turn
+            // "A&B" into "A & B" and "cafe'" into "caf e'".  Surrounding
+            // whitespace comes from the template layout and is trimmed once, off
+            // the assembled value, rather than off each piece.
+            $value = trim(join('', $this->cdata));
             $this->cell->setValue($value);
         }
 
@@ -283,7 +289,7 @@ class SsamlXlsx
     function CharacterData($Parser, $Data)
     {
         if (is_array($this->cdata)) {
-            $this->cdata[] = trim($Data);
+            $this->cdata[] = $Data;  // trimmed as a whole in EndCell
         }
     }
 
