@@ -281,7 +281,7 @@ class SsamlXlsx
     function Error($Message)
     {
         $lineNo = xml_get_current_line_number($this->parser);
-        trigger_error($Message." at line {$lineNo}", E_USER_ERROR);
+        throw new RuntimeException($Message." at line {$lineNo}");
     }
 
     //----------------------------------------------------------------------
@@ -322,18 +322,16 @@ class SsamlXlsx
     function Parse($XmlString)
     {
         $this->parser = xml_parser_create();
-        xml_set_object($this->parser, $this);
         xml_set_element_handler($this->parser,
-                                "StartElement",
-                                "EndElement"
+                                array($this, 'StartElement'),
+                                array($this, 'EndElement')
                                 );
         xml_set_character_data_handler($this->parser,
-                                       'CharacterData'
+                                       array($this, 'CharacterData')
                                        );
         if (!xml_parse($this->parser, $XmlString, true)) {
             $this->error("XML error: ".xml_error_string(xml_get_error_code($this->parser)));
         }
-        xml_parser_free($this->parser);
     }
 
     function Render($Disposition)
